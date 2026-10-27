@@ -1,0 +1,10 @@
+
+incident_id,incident_date,branch,incident_type,duration_hours,transactions_per_hour,contribution_per_transaction_eur,lost_transaction_fraction,recovery_cost_eur
+INC-001,2026-09-03,Branch A,Wi-Fi outage,1.5,80,4.00,0.60,75
+INC-002,2026-09-08,Branch B,Internet outage,2.0,65,5.00,0.70,100
+INC-003,2026-09-12,Branch A,POS connectivity issue,0.5,90,4.50,0.40,30
+INC-004,2026-09-18,Branch C,Wi-Fi outage,3.0,55,4.00,0.65,120
+INC-005,2026-09-22,Branch B,DNS resolution issue,1.0,70,5.00,0.50,45
+INC-006,2026-10-02,Branch C,Internet outage,1.5,60,4.00,0.75,80
+INC-007,2026-10-11,Branch A,Access point failure,0.75,85,4.50,0.35,40
+INC-008,2026-10-19,Branch B,Payment connectivity issue,2.5,75,5.00,0.55,110

@@ -1,3 +1,4 @@
+import math
 
 def estimate_annual_impact(
     outages_per_year: int,
@@ -8,6 +9,19 @@ def estimate_annual_impact(
     recovery_cost_per_outage: float,
 ) -> dict[str, float]:
     """Estimate annual financial impact using explicit assumptions."""
+
+    values = {
+        "Outages per year": outages_per_year,
+        "Outage duration": average_duration_hours,
+        "Affected transactions per hour": affected_transactions_per_hour,
+        "Contribution per transaction": contribution_per_transaction,
+        "Lost transaction fraction": lost_transaction_fraction,
+        "Recovery cost per outage": recovery_cost_per_outage,
+    }
+
+    for label, value in values.items():
+        if not math.isfinite(value):
+            raise ValueError(f"{label} must be a finite number.")
 
     if outages_per_year < 0:
         raise ValueError("Outages per year cannot be negative.")
@@ -57,6 +71,16 @@ def estimate_investment_return(
 ) -> dict[str, float | None]:
     """Estimate the financial return of a proposed technology investment."""
 
+    values = {
+        "Upfront cost": upfront_cost,
+        "Expected annual savings": expected_annual_gross_savings,
+        "Annual maintenance cost": annual_maintenance_cost,
+    }
+
+    for label, value in values.items():
+        if not math.isfinite(value):
+            raise ValueError(f"{label} must be a finite number.")
+
     if upfront_cost <= 0:
         raise ValueError("Upfront cost must be greater than zero.")
 
@@ -88,7 +112,6 @@ def estimate_investment_return(
     }
 
 
-
 def compare_investments(
     investments: list[dict[str, str | float]],
     available_budget: float | None = None,
@@ -98,9 +121,12 @@ def compare_investments(
     if not investments:
         raise ValueError("At least one investment option is required.")
 
-    if available_budget is not None and available_budget < 0:
-        raise ValueError("Available budget cannot be negative.")
+    if available_budget is not None:
+        if not math.isfinite(available_budget):
+            raise ValueError("Available budget must be a finite number.")
 
+        if available_budget < 0:
+            raise ValueError("Available budget cannot be negative.")
     results = []
 
     for investment in investments:
@@ -290,12 +316,23 @@ def summarize_investments(
     }
 
 
+
 def estimate_preventable_impact(
     observed_impact_eur: float,
     preventable_fraction: float,
     observation_days: int,
 ) -> dict[str, float]:
     """Estimate potentially prevented impact and annualized gross savings."""
+
+    values = {
+        "Observed impact": observed_impact_eur,
+        "Preventable fraction": preventable_fraction,
+        "Observation days": observation_days,
+    }
+
+    for label, value in values.items():
+        if not math.isfinite(value):
+            raise ValueError(f"{label} must be a finite number.")
 
     if observed_impact_eur < 0:
         raise ValueError("Observed impact cannot be negative.")

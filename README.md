@@ -122,7 +122,7 @@ With the virtual environment activated, run:
 python -m pytest -v
 ```
 
-The project currently has 27 automated tests covering financial calculations, investment comparisons, savings scenarios, preventable-impact estimates, and incident-data validation.
+The project currently has 39 automated tests covering financial calculations, investment comparisons, savings scenarios, preventable-impact estimates, and incident-data validation.
 
 ## How the Financial Estimates Work
 

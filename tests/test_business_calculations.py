@@ -305,3 +305,139 @@ def test_estimate_preventable_impact_rejects_fraction_above_one():
 def test_estimate_preventable_impact_rejects_zero_observation_days():
     with pytest.raises(ValueError):
         estimate_preventable_impact(1000, 0.5, 0)
+
+
+def test_investment_rejects_nan_savings():
+    with pytest.raises(ValueError):
+        estimate_investment_return(
+            upfront_cost=400,
+            expected_annual_gross_savings=float("nan"),
+            annual_maintenance_cost=200,
+        )
+
+
+def test_investment_rejects_infinite_upfront_cost():
+    with pytest.raises(ValueError):
+        estimate_investment_return(
+            upfront_cost=float("inf"),
+            expected_annual_gross_savings=726,
+            annual_maintenance_cost=200,
+        )
+
+
+def test_preventable_impact_rejects_nan_fraction():
+    with pytest.raises(ValueError):
+        estimate_preventable_impact(
+            observed_impact_eur=1000,
+            preventable_fraction=float("nan"),
+            observation_days=50,
+        )
+
+
+def test_annual_impact_rejects_negative_outage_frequency():
+    with pytest.raises(ValueError, match="Outages per year cannot be negative"):
+        estimate_annual_impact(
+            outages_per_year=-1,
+            average_duration_hours=1.5,
+            affected_transactions_per_hour=80,
+            contribution_per_transaction=4,
+            lost_transaction_fraction=0.5,
+            recovery_cost_per_outage=75,
+        )
+
+def test_annual_impact_rejects_nan_duration():
+    with pytest.raises(ValueError):
+        estimate_annual_impact(
+            outages_per_year=10,
+            average_duration_hours=float("nan"),
+            affected_transactions_per_hour=80,
+            contribution_per_transaction=4,
+            lost_transaction_fraction=0.5,
+            recovery_cost_per_outage=75,
+        )
+
+
+def test_annual_impact_rejects_infinite_recovery_cost():
+    with pytest.raises(ValueError):
+        estimate_annual_impact(
+            outages_per_year=10,
+            average_duration_hours=1.5,
+            affected_transactions_per_hour=80,
+            contribution_per_transaction=4,
+            lost_transaction_fraction=0.5,
+            recovery_cost_per_outage=float("inf"),
+        )
+
+
+def test_savings_scenarios_reject_nan_savings():
+    with pytest.raises(ValueError):
+        analyze_savings_scenarios(
+            upfront_cost=400,
+            conservative_annual_gross_savings=500,
+            expected_annual_gross_savings=float("nan"),
+            optimistic_annual_gross_savings=900,
+            annual_maintenance_cost=200,
+        )
+
+
+def test_savings_scenarios_reject_infinite_upfront_cost():
+    with pytest.raises(ValueError):
+        analyze_savings_scenarios(
+            upfront_cost=float("inf"),
+            conservative_annual_gross_savings=500,
+            expected_annual_gross_savings=700,
+            optimistic_annual_gross_savings=900,
+            annual_maintenance_cost=200,
+        )
+
+
+def test_preventable_impact_rejects_infinite_observed_impact():
+    with pytest.raises(ValueError):
+        estimate_preventable_impact(
+            observed_impact_eur=float("inf"),
+            preventable_fraction=0.5,
+            observation_days=50,
+        )
+
+
+def test_preventable_impact_rejects_infinite_observation_fraction():
+    with pytest.raises(ValueError):
+        estimate_preventable_impact(
+            observed_impact_eur=1000,
+            preventable_fraction=float("inf"),
+            observation_days=50,
+        )
+
+
+def test_compare_investments_rejects_nan_budget():
+    investments = [
+        {
+            "name": "Backup internet",
+            "upfront_cost": 400,
+            "expected_annual_gross_savings": 700,
+            "annual_maintenance_cost": 200,
+        }
+    ]
+
+    with pytest.raises(ValueError):
+        compare_investments(
+            investments,
+            available_budget=float("nan"),
+        )
+
+
+def test_compare_investments_rejects_infinite_budget():
+    investments = [
+        {
+            "name": "Backup internet",
+            "upfront_cost": 400,
+            "expected_annual_gross_savings": 700,
+            "annual_maintenance_cost": 200,
+        }
+    ]
+
+    with pytest.raises(ValueError):
+        compare_investments(
+            investments,
+            available_budget=float("inf"),
+        )
